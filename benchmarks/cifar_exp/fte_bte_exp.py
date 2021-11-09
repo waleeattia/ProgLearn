@@ -1,17 +1,12 @@
 #%%
-from __future__ import print_function
-import torch
-import torch._tensor
-import torch.nn as nn
-
-from supcon import losses
-
 import random
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
 from itertools import product
 import pandas as pd
+
+from supcon import losses
 
 import numpy as np
 import pickle
@@ -211,7 +206,7 @@ def LF_experiment(train_x, train_y, test_x, test_y, ntrees, shift, slot, model, 
 
     #print(df)
     summary = (df,df_single_task)
-    file_to_save = 'C:/Users/walee/Desktop/JHU Course Material/Semester 5 (Fall 2021)/NDD 1/ProgLearn/benchmarks/cifar_exp/result/result'+model+str(ntrees)+'_'+str(shift)+'_Adam.pickle'
+    file_to_save = 'C:/Users/walee/Desktop/JHU Course Material/Semester 5 (Fall 2021)/NDD 1/ProgLearn/benchmarks/cifar_exp/result/result/'+model+str(ntrees)+'_'+str(shift)+'_Adam'+'.pickle'
     with open(file_to_save, 'wb') as f:
         pickle.dump(summary, f)
 
@@ -291,9 +286,8 @@ if model == "uf":
 elif model == "dnn":
     slot_fold = range(10) #edit this default 10 is correct?
     
-    
-    #parallel
     '''
+    #parallel
     def perform_shift(shift_slot_tuple):
         shift, slot = shift_slot_tuple
         return run_parallel_exp(data_x, data_y, 0, model, num_points_per_task, slot=slot, shift=shift)
@@ -316,8 +310,6 @@ elif model == "dnn":
     iterable = product(n_trees,shift_fold,slot_fold)
 
     for ntree,shift,slot in iterable:
-        print("inputted shift is:", shift)
-        print("")
         run_parallel_exp(
                     data_x, data_y, ntree, model, num_points_per_task, slot=slot, shift=shift
                     )
