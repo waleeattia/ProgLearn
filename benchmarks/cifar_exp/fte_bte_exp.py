@@ -6,7 +6,12 @@ from tensorflow.keras import layers
 from itertools import product
 import pandas as pd
 
-from supcon import losses
+from supcon.losses import customLoss # just to confirm that I could write and implement a custom loss function to produce results
+from tensorflow_addons.losses.contrastive import contrastive_loss # incorporate built in contrastive loss 
+from supcon.losses import contrastiveLoss # wrote a simplistic version of contrastive loss for siamese networks
+from supcon.losses import supervised_contrastive_loss # Ronan's initial implementation with bugs
+from supcon.losses import CL # trying to understand cosine similarity to implement supcon
+from supcon.losses import SupervisedContrastiveLoss # adapted version of SupConLoss for ftebte setting, uses cosine similarity matrix
 
 import numpy as np
 import pickle
@@ -23,8 +28,6 @@ from proglearn.progressive_learner import ProgressiveLearner
 from proglearn.deciders import SimpleArgmaxAverage
 from proglearn.transformers import NeuralClassificationTransformer, TreeClassificationTransformer
 from proglearn.voters import TreeClassificationVoter, KNNClassificationVoter
-
-import tensorflow as tf
 
 import time
 import sys
@@ -95,7 +98,7 @@ def LF_experiment(train_x, train_y, test_x, test_y, ntrees, shift, slot, model, 
         default_transformer_kwargs = {
             "network": network,
             "euclidean_layer_idx": -2,
-            "loss": losses.contrastive_loss(X_train, labels=y_train),
+            "loss": SupervisedContrastiveLoss,
             "optimizer": Adam(3e-4),
             "fit_kwargs": {
                 "epochs": 100,
@@ -206,7 +209,7 @@ def LF_experiment(train_x, train_y, test_x, test_y, ntrees, shift, slot, model, 
 
     #print(df)
     summary = (df,df_single_task)
-    file_to_save = 'C:/Users/walee/Desktop/JHU Course Material/Semester 5 (Fall 2021)/NDD 1/ProgLearn/benchmarks/cifar_exp/result/result/'+model+str(ntrees)+'_'+str(shift)+'_Adam'+'.pickle'
+    file_to_save = 'C:/Users/walee/Desktop/JHU Course Material/Semester 5 (Fall 2021)/NDD 1/ProgLearn/benchmarks/cifar_exp/result/result/'+model+str(ntrees)+'_'+str(shift)+'_SupervisedContrastiveLoss'+'.pickle'
     with open(file_to_save, 'wb') as f:
         pickle.dump(summary, f)
 
@@ -304,7 +307,7 @@ elif model == "dnn":
     '''
 
     #sequential
-    #slot_fold = range(1) #this should be 10, comment out
+    slot_fold = range(1) 
     shift_fold = [1,2,3,4,5,6]
     n_trees=[0]
     iterable = product(n_trees,shift_fold,slot_fold)

@@ -130,7 +130,7 @@ multitask_inference_time_tmp2 = [[] for _ in range(reps)]
 
 count = 0   
 for shift in range(shifts):
-    filename = 'C:/Users/walee/Desktop/JHU Course Material/Semester 5 (Fall 2021)/NDD 1/ProgLearn/benchmarks/cifar_exp/result/result/'+model+str(ntrees)+'_'+str(shift+1)+'_SupConLoss'+'.pickle'
+    filename = 'C:/Users/walee/Desktop/JHU Course Material/Semester 5 (Fall 2021)/NDD 1/ProgLearn/benchmarks/cifar_exp/result/result/'+model+str(ntrees)+'_'+str(shift+1)+'_SupervisedContrastiveLoss'+'.pickle'
     filename2 = 'C:/Users/walee/Desktop/JHU Course Material/Semester 5 (Fall 2021)/NDD 1/ProgLearn/benchmarks/cifar_exp/result/result/'+model+str(ntrees)+'_'+str(shift+1)+'_categorical_crossentropy'+'.pickle'
     multitask_df, single_task_df = unpickle(filename)
     multitask_df2, single_task_df2 = unpickle(filename2)
@@ -212,7 +212,7 @@ fontsize=22
 ticksize=20
 
 fig, ax = plt.subplots(2,2, figsize=(16,11.5))
-#fig.suptitle('ntrees = '+str(ntrees),fontsize=25)
+fig.suptitle('SupervisedContrastiveLoss - categorical_crossentropy',fontsize=25)
 difference = []
 zip_object = zip(fte2, fte)
 for fte2_i, fte_i in zip_object:
@@ -221,7 +221,7 @@ ax[0][0].plot(np.arange(1,n_tasks+1), difference, c='red', marker='.', markersiz
 ax[0][0].hlines(1, 1,n_tasks, colors='grey', linestyles='dashed',linewidth=1.5)
 ax[0][0].tick_params(labelsize=ticksize)
 ax[0][0].set_xlabel('Number of tasks seen', fontsize=fontsize)
-ax[0][0].set_ylabel('FTE (SupConLoss - CatCrossEntropy)', fontsize=fontsize)
+ax[0][0].set_ylabel('FTE Difference', fontsize=fontsize)
 
 
 for i in range(n_tasks):
@@ -232,7 +232,7 @@ for i in range(n_tasks):
     ax[0][1].plot(ns, et2-et, c='red', linewidth = 2.6)
     
 ax[0][1].set_xlabel('Number of tasks seen', fontsize=fontsize)
-ax[0][1].set_ylabel('BTE (SupConLoss - CatCrossEntropy)', fontsize=fontsize)
+ax[0][1].set_ylabel('BTE Difference', fontsize=fontsize)
 #ax[0][1].set_xticks(np.arange(1,10))
 ax[0][1].tick_params(labelsize=ticksize)
 ax[0][1].hlines(1, 1,n_tasks, colors='grey', linestyles='dashed',linewidth=1.5)
@@ -247,7 +247,7 @@ for i in range(n_tasks):
     ax[1][0].plot(ns, et2-et, c='red', linewidth = 2.6)
     
 ax[1][0].set_xlabel('Number of tasks seen', fontsize=fontsize)
-ax[1][0].set_ylabel('TE (SupConLoss - CatCrossEntropy)', fontsize=fontsize)
+ax[1][0].set_ylabel('TE Difference', fontsize=fontsize)
 #ax[1][0].set_xticks(np.arange(1,10))
 ax[1][0].tick_params(labelsize=ticksize)
 ax[1][0].hlines(1, 1,n_tasks, colors='grey', linestyles='dashed',linewidth=1.5)
@@ -262,7 +262,7 @@ for i in range(n_tasks):
             
 #ax[1][1].legend(loc='center left', bbox_to_anchor=(1, 0.5), fontsize=22)
 ax[1][1].set_xlabel('Number of tasks seen', fontsize=fontsize)
-ax[1][1].set_ylabel('Accuracy (SupConLoss - CatCrossEntropy)', fontsize=fontsize)
+ax[1][1].set_ylabel('Accuracy Difference', fontsize=fontsize)
 #ax[1][1].set_yticks([.4,.6,.8,.9,1, 1.1,1.2])
 #ax[1][1].set_xticks(np.arange(1,10))
 #ax[1][1].set_ylim(0.89, 1.15)
