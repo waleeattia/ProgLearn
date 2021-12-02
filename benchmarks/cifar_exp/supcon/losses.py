@@ -772,6 +772,22 @@ def contrastiveLoss(yTrue,yPred):
   print(loss, type(loss))
   return loss
 
+import tensorflow_addons as tfa
+def SupervisedContrastiveLoss(yTrue, yPred):
+  temp=0.1
+  #print(yTrue)
+  #print(yPred)
+  r = yPred
+  y = yTrue
+  #r = tf.reshape(yPred,(32,10))
+  #y = tf.reshape(yTrue,(32,10))
+  r, _ = tf.linalg.normalize(r, axis=1)
+  r_dists = tf.matmul(r, tf.transpose(r))
+  #r_dists = tf.linalg.set_diag(r_dists, tf.zeros(r_dists.shape[0], dtype=r_dists.dtype))  # exclude itself distance
+  logits = tf.divide(r_dists, temp)
+
+  return tfa.losses.npairs_loss(tf.squeeze(tf.reduce_sum(y * y, 1)), logits)
+
 def CL(yTrue, yPred):
   print(yTrue, yPred)
   numer = math.exp(cosSimilarity(yTrue, yPred))
